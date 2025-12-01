@@ -1,23 +1,77 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Content Display</h1>
+<h1>📚 Content Gallery</h1>
 {% if contents %}
-    {% for item in contents %}
-    <div class="content-item">
-        <div class="content-title">{{ item.title }}</div>
-        <div>{{ item.content }}</div>
+    <div id="content-container">
+        {% for item in contents %}
+        <div class="content-item" style="--index: {{ loop.index0 }};">
+            <div class="content-title">{{ item.title }}</div>
+            <div>{{ item.content }}</div>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 {% else %}
-    <div class="empty">No content available. <a href="/add">Add some content</a> to get started.</div>
+    <div class="empty">
+        <div style="font-size: 3em; margin-bottom: 20px;">📝</div>
+        <div style="font-size: 1.2em;">No content available yet!</div>
+        <div style="margin-top: 15px;"><a href="/add">✨ Add some content</a> to get started.</div>
+    </div>
 {% endif %}
 
 <script>
-// Fetch content via API and display
+// Fetch content via API and add dynamic effects
 fetch('/api/content')
     .then(response => response.json())
-    .then(data => console.log('API Data:', data))
+    .then(data => {
+        console.log('API Data:', data);
+        // Add sparkle effect
+        createSparkles();
+    })
     .catch(error => console.error('Error:', error));
+
+// Create floating sparkles animation
+function createSparkles() {
+    const container = document.querySelector('.container');
+    for(let i = 0; i < 5; i++) {
+        setTimeout(() => {
+            const sparkle = document.createElement('div');
+            sparkle.innerHTML = '✨';
+            sparkle.style.position = 'absolute';
+            sparkle.style.fontSize = '20px';
+            sparkle.style.pointerEvents = 'none';
+            sparkle.style.left = Math.random() * 100 + '%';
+            sparkle.style.top = Math.random() * 100 + '%';
+            sparkle.style.animation = 'sparkleFloat 3s ease-out forwards';
+            container.appendChild(sparkle);
+            
+            setTimeout(() => sparkle.remove(), 3000);
+        }, i * 500);
+    }
+}
+
+// Add sparkle animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes sparkleFloat {
+        0% { opacity: 0; transform: translateY(0) scale(0); }
+        50% { opacity: 1; transform: translateY(-20px) scale(1); }
+        100% { opacity: 0; transform: translateY(-40px) scale(0); }
+    }
+`;
+document.head.appendChild(style);
+
+// Add hover effects to content items
+document.addEventListener('DOMContentLoaded', function() {
+    const items = document.querySelectorAll('.content-item');
+    items.forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-8px) scale(1.02)';
+        });
+        item.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(-5px) scale(1)';
+        });
+    });
+});
 </script>
 {% endblock %}
