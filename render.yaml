@@ -3,12 +3,10 @@ services:
     name: content-backend
     env: node
     region: oregon
-    buildCommand: npm ci && cd backend && npm ci --only=production && npm rebuild sqlite3 --build-from-source
+    buildCommand: npm install && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
         value: 10000
-      - key: PYTHON
-        value: /usr/bin/python3

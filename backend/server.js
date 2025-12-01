@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const sqlite3 = require('sqlite3').verbose();
+const Database = require('better-sqlite3');
 const path = require('path');
 
 const PORT = process.env.PORT || 10000;
@@ -11,47 +11,44 @@ app.use(cors());
 app.use(express.json());
 
 // Initialize DB
-const db = new sqlite3.Database(DB_PATH, (err) => {
-  if (err) {
-    console.error('DB open error', err);
-    process.exit(1);
-  }
-  console.log('Connected to SQLite DB at', DB_PATH);
-});
+const db = new Database(DB_PATH);
 
 // Create table if not exist
-db.serialize(() => {
-  db.run(`
-    CREATE TABLE IF NOT EXISTS posts (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      title TEXT NOT NULL,
-      body TEXT NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-  `);
-});
+db.exec(`
+  CREATE TABLE IF NOT EXISTS posts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    body TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )
+`);
+
+// Prepare statements
+const getAllPosts = db.prepare('SELECT * FROM posts ORDER BY created_at DESC');
+const insertPost = db.prepare('INSERT INTO posts (title, body) VALUES (?, ?)');
+const getPostById = db.prepare('SELECT * FROM posts WHERE id = ?');
 
 // Routes
 app.get('/api/posts', (req, res) => {
-  db.all(`SELECT * FROM posts ORDER BY created_at DESC`, [], (err, rows) => {
-    if (err) return res.status(500).json({ error: err.message });
+  try {
+    const rows = getAllPosts.all();
     res.json(rows);
-  });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.post('/api/posts', (req, res) => {
   const { title, body } = req.body;
   if (!title || !body) return res.status(400).json({ error: 'title and body required' });
 
-  const stmt = db.prepare(`INSERT INTO posts (title, body) VALUES (?, ?)`);
-  stmt.run([title, body], function(err) {
-    if (err) return res.status(500).json({ error: err.message });
-    const insertedId = this.lastID;
-    db.get(`SELECT * FROM posts WHERE id = ?`, [insertedId], (err2, row) => {
-      if (err2) return res.status(500).json({ error: err2.message });
-      res.status(201).json(row);
-    });
-  });
+  try {
+    const result = insertPost.run(title, body);
+    const newPost = getPostById.get(result.lastInsertRowid);
+    res.status(201).json(newPost);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.get('/', (req, res) => res.json({ message: 'Content backend is running', status: 'ok' }));
@@ -63,12 +60,12 @@ app.get('/health', (req, res) => {
 // Graceful shutdown
 process.on('SIGINT', () => {
   console.log('Closing DB');
-  db.close(()=>process.exit(0));
+  db.close();
+  process.exit(0);
 });
 
 const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server listening on port ${PORT}`);
 });
 
-// Handle server startup timeout
 server.timeout = 30000;

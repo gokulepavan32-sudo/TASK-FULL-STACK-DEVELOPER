@@ -5,13 +5,13 @@
   "scripts": {
     "start": "node backend/server.js",
     "dev": "node backend/server.js",
-    "build": "cd backend && npm ci --only=production && npm rebuild sqlite3 --build-from-source",
+    "build": "cd backend && npm install --production",
     "postinstall": "npm run build"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.2",
-    "sqlite3": "^5.1.7"
+    "better-sqlite3": "^9.2.2"
   },
   "engines": {
     "node": "20.x"
