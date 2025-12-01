@@ -3,9 +3,19 @@ services:
     name: content-backend
     env: node
     region: oregon
+<<<<<<< HEAD
     buildCommand: cd backend && npm install --build-from-source
     startCommand: node server.js
     workingDirectory: ./backend
     envVars:
       - key: NODE_ENV
         value: production
+=======
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+>>>>>>> a3ee0d2 (after pavan update)

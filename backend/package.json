@@ -20,6 +20,10 @@
   "license": "ISC",
   "type": "commonjs",
   "engines": {
+<<<<<<< HEAD
     "node": ">=18.0.0"
+=======
+    "node": ">=20.0.0"
+>>>>>>> a3ee0d2 (after pavan update)
   }
 }

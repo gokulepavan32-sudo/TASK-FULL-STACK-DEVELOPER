@@ -3,7 +3,11 @@ const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
+<<<<<<< HEAD
 const PORT = process.env.PORT || 4000;
+=======
+const PORT = process.env.PORT || 10000;
+>>>>>>> a3ee0d2 (after pavan update)
 const DB_PATH = path.join(__dirname, 'db.sqlite');
 
 const app = express();
@@ -12,7 +16,14 @@ app.use(express.json());
 
 // Initialize DB
 const db = new sqlite3.Database(DB_PATH, (err) => {
+<<<<<<< HEAD
   if (err) return console.error('DB open error', err);
+=======
+  if (err) {
+    console.error('DB open error', err);
+    process.exit(1);
+  }
+>>>>>>> a3ee0d2 (after pavan update)
   console.log('Connected to SQLite DB at', DB_PATH);
 });
 
@@ -53,10 +64,26 @@ app.post('/api/posts', (req, res) => {
 
 app.get('/', (req, res) => res.json({ message: 'Content backend is running', status: 'ok' }));
 
+<<<<<<< HEAD
+=======
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'healthy', timestamp: new Date().toISOString() });
+});
+
+>>>>>>> a3ee0d2 (after pavan update)
 // Graceful shutdown
 process.on('SIGINT', () => {
   console.log('Closing DB');
   db.close(()=>process.exit(0));
 });
 
+<<<<<<< HEAD
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
+=======
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server listening on port ${PORT}`);
+});
+
+// Handle server startup timeout
+server.timeout = 30000;
+>>>>>>> a3ee0d2 (after pavan update)

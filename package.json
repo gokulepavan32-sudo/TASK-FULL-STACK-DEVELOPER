@@ -5,8 +5,13 @@
   "scripts": {
     "start": "node backend/server.js",
     "dev": "node backend/server.js",
+<<<<<<< HEAD
     "build": "cd backend && npm install --production",
     "postinstall": "cd backend && npm rebuild sqlite3"
+=======
+    "build": "cd backend && npm install --production && npm rebuild sqlite3",
+    "postinstall": "npm run build"
+>>>>>>> a3ee0d2 (after pavan update)
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -14,7 +19,11 @@
     "sqlite3": "^5.1.7"
   },
   "engines": {
+<<<<<<< HEAD
     "node": "18.x"
+=======
+    "node": "20.x"
+>>>>>>> a3ee0d2 (after pavan update)
   },
   "os": ["linux"]
 }
