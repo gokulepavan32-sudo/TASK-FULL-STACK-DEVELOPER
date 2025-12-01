@@ -3,9 +3,9 @@ services:
     name: content-backend
     env: node
     region: oregon
-    buildCommand: npm install && cd backend && npm install
-    startCommand: node backend/server.js
+    buildCommand: cd backend && npm install --build-from-source
+    startCommand: node server.js
+    workingDirectory: ./backend
     envVars:
       - key: NODE_ENV
         value: production
-    publishDir: ./
