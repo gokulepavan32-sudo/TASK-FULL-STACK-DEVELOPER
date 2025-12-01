@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: content-backend
+    env: node
+    region: oregon
+    buildCommand: npm install && cd backend && npm install
+    startCommand: node backend/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+    publishDir: ./

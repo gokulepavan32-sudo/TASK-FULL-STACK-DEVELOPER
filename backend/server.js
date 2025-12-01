@@ -51,7 +51,7 @@ app.post('/api/posts', (req, res) => {
   });
 });
 
-app.get('/', (req, res) => res.send('Content backend is running.'));
+app.get('/', (req, res) => res.json({ message: 'Content backend is running', status: 'ok' }));
 
 // Graceful shutdown
 process.on('SIGINT', () => {
