@@ -1,17 +1,14 @@
 {
   "name": "content-app",
   "version": "1.0.0",
-  "main": "backend/server.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node backend/server.js",
-    "dev": "node backend/server.js",
-    "build": "npm install --production",
-    "postinstall": "cd backend && npm install --production"
+    "start": "node server.js",
+    "dev": "node server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.21.2",
-    "better-sqlite3": "^9.2.2"
+    "express": "^4.21.2"
   },
   "engines": {
     "node": "20.x"

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:10000';
+const API_BASE = import.meta.env.VITE_API_BASE || (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:10000');
 
 export default function AddContent() {
   const [title, setTitle] = useState('');

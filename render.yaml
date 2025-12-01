@@ -3,7 +3,7 @@ services:
     name: content-backend
     env: node
     region: oregon
-    buildCommand: npm install && cd backend && npm install --production
+    buildCommand: npm install
     startCommand: npm start
     envVars:
       - key: NODE_ENV
