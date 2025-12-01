@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Content Display</h1>
+{% if contents %}
+    {% for item in contents %}
+    <div class="content-item">
+        <div class="content-title">{{ item.title }}</div>
+        <div>{{ item.content }}</div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="empty">No content available. <a href="/add">Add some content</a> to get started.</div>
+{% endif %}
+
+<script>
+// Fetch content via API and display
+fetch('/api/content')
+    .then(response => response.json())
+    .then(data => console.log('API Data:', data))
+    .catch(error => console.error('Error:', error));
+</script>
+{% endblock %}
