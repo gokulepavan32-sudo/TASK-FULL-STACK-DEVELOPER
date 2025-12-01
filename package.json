@@ -1,0 +1,20 @@
+{
+  "name": "content-app",
+  "version": "1.0.0",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js",
+    "build": "cd backend && npm install --production && npm rebuild sqlite3",
+    "postinstall": "npm run build"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "sqlite3": "^5.1.7"
+  },
+  "engines": {
+    "node": "20.x"
+  },
+  "os": ["linux"]
+}
